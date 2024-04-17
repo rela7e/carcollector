@@ -1,9 +1,6 @@
 from django.shortcuts import render
 
-cars = [
-    {'make': 'Chevrolet', 'model': 'Camaro', 'year': '1972', 'colour': 'red'},
-    {'make': 'Ford', 'model': 'Mustang', 'year': '1970', 'colour': 'black'},
-]
+from.models import Car
 
 
 
@@ -13,6 +10,10 @@ def home(request):
 def about(request):
     return render(request, 'about.html')
 def cars_index(request):
+    cars = Car.objects.all()
     return render(request, 'cars/index.html', {
         'cars': cars
     })
+def cars_detail(request, car_id):
+  car = Car.objects.get(id=car_id)
+  return render(request, 'cars/detail.html', { 'car': car })
