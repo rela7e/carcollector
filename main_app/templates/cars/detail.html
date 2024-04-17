@@ -17,5 +17,24 @@
       <a href="{% url 'cars_delete' car.id %}">Delete</a>
     </div>
 </div>
-
+<div class="col s6">
+  <form action="{% url 'add_accolade' car.id %}" method="POST">
+    {% csrf_token %}
+    {{ accolade_form.as_p }}
+    <input type="submit" class="btn" value="Add Accolade">
+  </form>
+  <table class="striped">
+    <thead>
+      <tr><th>Accolade</th></tr>
+    </thead>
+    <tbody>
+      {% for accolade in car.accolade_set.all %}
+        <tr>
+          <td>{{accolade.name}}</td>
+          <td>{{accolade.description}}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 {% endblock %}

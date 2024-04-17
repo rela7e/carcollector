@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from.models import Car
+from .models import Car
+from .forms import AccoladeForm
 
 
 
@@ -16,7 +17,8 @@ def cars_index(request):
     })
 def cars_detail(request, car_id):
   car = Car.objects.get(id=car_id)
-  return render(request, 'cars/detail.html', { 'car': car })
+  accolade_form = AccoladeForm()
+  return render(request, 'cars/detail.html', { 'car': car, 'accolade_form': accolade_form })
 
 class CarCreate(CreateView):
   model = Car
@@ -29,3 +31,11 @@ class CarUpdate(UpdateView):
 class CarDelete(DeleteView):
   model = Car
   success_url = '/cars'
+
+def add_accolade(request, car_id):
+  form = AccoladeForm(request.POST)
+  if form.is_valid():
+    new_accolade = form.save(commit=False)
+    new_accolade.cat_id = car_id
+    new_accolade.save()
+  return redirect('detail', car_id=car_id)
